@@ -3,6 +3,7 @@ import { AgentRoster } from './components/AgentRoster';
 import { AutonomousDiscussionModal } from './components/AutonomousDiscussionModal';
 import { ChatArea } from './components/ChatArea';
 import { Header } from './components/Header';
+import { Office3DModal } from './components/Office3DModal';
 import { Sidebar } from './components/Sidebar';
 import { HUMAN_LEAD, LOKATALENTA_AGENTS } from './data/agents';
 import { INITIAL_CHANNELS } from './data/channels';
@@ -20,6 +21,8 @@ export function App() {
   const [activeDmAgentId, setActiveDmAgentId] = useState<number | null>(null);
   const [rosterOpen, setRosterOpen] = useState(true);
   const [autoModalOpen, setAutoModalOpen] = useState(false);
+  const [office3dOpen, setOffice3dOpen] = useState(false);
+  const [office3dFloor, setOffice3dFloor] = useState(2);
   const [searchQuery, setSearchQuery] = useState('');
 
   const [messages, setMessages] = useState<Message[]>(() => {
@@ -207,6 +210,10 @@ export function App() {
         onToggleRoster={() => setRosterOpen(!rosterOpen)}
         rosterOpen={rosterOpen}
         onOpenAutoDiscussion={() => setAutoModalOpen(true)}
+        onOpenOffice3D={() => {
+          setOffice3dFloor(2);
+          setOffice3dOpen(true);
+        }}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
       />
@@ -235,6 +242,10 @@ export function App() {
           isOpen={rosterOpen}
           onClose={() => setRosterOpen(false)}
           onSelectDm={handleSelectDm}
+          onOpenFloor={(fl) => {
+            setOffice3dFloor(fl);
+            setOffice3dOpen(true);
+          }}
         />
       </div>
 
@@ -243,6 +254,12 @@ export function App() {
         onClose={() => setAutoModalOpen(false)}
         activeChannelName={activeChannel?.name ?? 'lms-full-revamp-anti-slop'}
         onInjectMessages={handleInjectSimulatedMessages}
+      />
+
+      <Office3DModal
+        isOpen={office3dOpen}
+        onClose={() => setOffice3dOpen(false)}
+        initialFloor={office3dFloor}
       />
     </div>
   );

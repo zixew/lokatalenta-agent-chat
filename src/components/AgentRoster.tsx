@@ -7,9 +7,10 @@ interface AgentRosterProps {
   isOpen: boolean;
   onClose: () => void;
   onSelectDm: (agentId: number) => void;
+  onOpenFloor?: (floor: number) => void;
 }
 
-export function AgentRoster({ agents, isOpen, onClose, onSelectDm }: AgentRosterProps) {
+export function AgentRoster({ agents, isOpen, onClose, onSelectDm, onOpenFloor }: AgentRosterProps) {
   const [selectedDivision, setSelectedDivision] = useState<string>('all');
 
   if (!isOpen) return null;
@@ -98,9 +99,14 @@ export function AgentRoster({ agents, isOpen, onClose, onSelectDm }: AgentRoster
             </p>
 
             <div className="pt-2 border-t border-[#D4D4CE] dark:border-[#282E3D] flex items-center justify-between text-[10px]">
-              <span className="font-mono text-[#71717A]">
-                Kantor 3D: Lantai {agent.floor}
-              </span>
+              <button
+                type="button"
+                onClick={() => onOpenFloor?.(agent.floor)}
+                title={`Kunjungi ${agent.name} di Lantai ${agent.floor} Kantor 3D`}
+                className="font-mono text-[#0F766E] dark:text-teal-400 hover:underline cursor-pointer flex items-center gap-1"
+              >
+                <span>📍 Lantai {agent.floor}</span>
+              </button>
               <button
                 type="button"
                 onClick={() => onSelectDm(agent.id)}

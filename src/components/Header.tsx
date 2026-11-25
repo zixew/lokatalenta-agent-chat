@@ -1,4 +1,4 @@
-import { ChevronDown, Moon, Search, Sun, Users, Zap } from 'lucide-react';
+import { Building2, ChevronDown, Moon, Search, Sun, Users, Zap } from 'lucide-react';
 import type { Agent } from '../types/chat';
 import { HUMAN_LEAD, LOKATALENTA_AGENTS } from '../data/agents';
 
@@ -10,6 +10,7 @@ interface HeaderProps {
   onToggleRoster: () => void;
   rosterOpen: boolean;
   onOpenAutoDiscussion: () => void;
+  onOpenOffice3D: () => void;
   searchQuery: string;
   onSearchChange: (q: string) => void;
 }
@@ -22,6 +23,7 @@ export function Header({
   onToggleRoster,
   rosterOpen,
   onOpenAutoDiscussion,
+  onOpenOffice3D,
   searchQuery,
   onSearchChange,
 }: HeaderProps) {
@@ -64,6 +66,16 @@ export function Header({
             className="w-full pl-8 pr-3 py-1 bg-[#F4F4F1] dark:bg-[#11141B] border border-[#D4D4CE] dark:border-[#282E3D] rounded text-xs text-[#18181B] dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-[#0F766E]"
           />
         </div>
+
+        <button
+          type="button"
+          onClick={onOpenOffice3D}
+          title="Buka Kantor Virtual 3D LokaTalenta"
+          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-[#D4D4CE] dark:border-[#282E3D] bg-[#F4F4F1] dark:bg-[#11141B] text-xs font-semibold text-[#18181B] dark:text-white hover:border-[#0F766E] transition-colors cursor-pointer active:scale-[0.98]"
+        >
+          <Building2 className="w-3.5 h-3.5 text-[#0F766E] dark:text-teal-400" />
+          <span className="hidden sm:inline">Kantor 3D</span>
+        </button>
 
         <button
           type="button"
