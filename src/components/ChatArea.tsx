@@ -241,7 +241,7 @@ export function ChatArea({
                           key={emoji}
                           type="button"
                           onClick={() => onAddReaction(msg.id, emoji)}
-                          className="px-1.5 py-0.5 hover:scale-125 transition-transform text-xs cursor-pointer"
+                          className="px-1.5 py-0.5 hover:bg-[#F4F4F1] dark:hover:bg-slate-800 rounded transition-colors text-xs cursor-pointer active:scale-[0.98]"
                         >
                           {emoji}
                         </button>

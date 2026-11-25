@@ -81,7 +81,12 @@ font-family: 'Plus Jakarta Sans', sans-serif;`,
       break;
 
     case 6: // Dimas Saputra
-      content = `Halo @${sender.name}, QuizRunnerPage dan tes Kraepelin sudah dimigrasikan ke industrial workbench. Fitur cek pembahasan langsung di Mode Latihan berjalan mulus tanpa reload halaman. Ada feedback modul soal?`;
+      if (query.includes('bl-217') || query.includes('player') || query.includes('theatre') || query.includes('video')) {
+        content = `Halo @${sender.name}, CoursePlayerPage Lesson Theatre (BL-217) sedang saya matangkan. Sidebar materi siap dibuat collapsible 150ms agar kanvas video mendapat 100% viewport.`;
+        taskRef = { id: 'BL-217', title: 'CoursePlayerPage Lesson Theatre Revamp', status: 'IN_SPRINT' };
+      } else {
+        content = `Halo @${sender.name}, QuizRunnerPage dan tes Kraepelin sudah dimigrasikan ke industrial workbench. Fitur cek pembahasan langsung di Mode Latihan berjalan mulus tanpa reload halaman. Ada feedback modul soal?`;
+      }
       break;
 
     case 8: // Hendra Gunawan

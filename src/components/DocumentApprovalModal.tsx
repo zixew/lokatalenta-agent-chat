@@ -1,4 +1,4 @@
-import { CheckCircle2, AlertTriangle, XCircle, FileText, ShieldAlert, Sparkles } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, XCircle, FileText, ShieldAlert, Check } from 'lucide-react';
 import { useState } from 'react';
 import type { DocumentProposal, ProposalStatus } from '../types/chat';
 
@@ -272,7 +272,7 @@ export function DocumentApprovalModal({
 
                 <div className="flex items-center justify-between gap-3 flex-wrap">
                   <div className="text-[11px] text-[#71717A] dark:text-slate-400 flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
+                    <Check className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
                     <span>
                       Otorisasi akan otomatis menyiarkan pengumuman resmi ke chat room tim.
                     </span>
