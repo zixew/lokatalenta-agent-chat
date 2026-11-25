@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+    --bg-canvas: #F4F4F1;
+    --surface-panel: #FFFFFF;
+    --surface-docked: #E8E8E3;
+    --border-industrial: #D4D4CE;
+    --border-focus: #0F1216;
+    --ink-primary: #18181B;
+    --ink-muted: #71717A;
+
+    --status-teal: #0F766E;
+    --status-emerald: #059669;
+    --status-amber: #D97706;
+    --status-crimson: #E11D48;
+    --status-cobalt: #2563EB;
+  }
+
+  html.dark {
+    --bg-canvas: #0D1117;
+    --surface-panel: #161B22;
+    --surface-docked: #1B1F2B;
+    --border-industrial: #282E3D;
+    --border-focus: #F1F5F9;
+    --ink-primary: #F0F6FC;
+    --ink-muted: #8B949E;
+
+    --status-teal: #14B8A6;
+    --status-emerald: #10B981;
+    --status-amber: #F59E0B;
+    --status-crimson: #FB7185;
+    --status-cobalt: #3B82F6;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--bg-canvas);
+    color: var(--ink-primary);
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+}
+
+.font-mono-tabular {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
