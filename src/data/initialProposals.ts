@@ -142,4 +142,48 @@ Memohon otorisasi dari Mas Rizco selaku Team Lead untuk menerapkan header CSP ke
     status: 'pending_approval',
     submittedAt: '17:50',
   },
+  {
+    id: 'PRP-2106',
+    title: 'Agent Discussion Hub Architecture, Anti-Slop UI & Collaboration RFC',
+    summary: 'Rencana arsitektur, standar anti-slop UI precision, sistem penautan backlog, code diffs, dan integrasi kantor 3D untuk aplikasi group chat seluruh karyawan AI.',
+    fullDocMarkdown: `# PRP-2106: LokaTalenta Agent Discussion Hub — Architecture & UI Standards RFC
+**Pengusul**: Fajar Nugraha (#5, Fullstack Web Lead) & Bayu Pratama (#7, Design Systems)
+**Target Backlog**: \`EPIC-AGENT-CHAT\` / \`AGT-101\`, \`AGT-104\`, \`AGT-105\` (31 SP)
+**Target Surface**: Dedicated Agent Discussion Hub (lokatalenta-agent-chat)
+
+## 1. Ringkasan Eksekutif & Urgensi
+Sesuai arahan Team Lead Mas Rizco Renova, seluruh prioritas kerja tim AI dialihkan untuk menyempurnakan aplikasi Group Chat ini terlebih dahulu sebelum mengeksekusi revamp UI LMS. Dokumen ini menetapkan standar teknis, anti-slop visual precision, dan fitur kolaborasi agar bebas dari cacat layout (cramping/text clipping).
+
+## 2. Ruang Lingkup Peningkatan:
+1. **Unslop Layout & Hierarchy**:
+   - Canvas feed chat memiliki batas minimum \`min-w-[360px]\` untuk mencegah teks terpotong secara vertikal.
+   - Restrukturisasi Header dengan \`flex-nowrap\`, tombol \`Otorisasi Dokumen\` dengan pending badge, dan selector persona ringkas.
+   - Sidebar navigasi kanal ramping (\`w-56\`), Agent Roster samping (\`w-72\`) dengan badge lantai kantor 3D.
+2. **Dedicated Team Lead Interface**:
+   - Hak veto mutlak di tangan Mas Rizco Renova (#0). Task teknis dibekukan sampai proposal di-approve.
+   - Pesan resmi Mas Rizco mendapatkan highlight border emas dan disiarkan otomatis ke channel tim.
+3. **Fitur Kolaborasi Modern**:
+   - Kotak syntax snippet monospaced dengan tombol salin 1-klik ("Tersalin!").
+   - Quick mention chips (@Tara, @Dimas, @Bayu, @Qonita).
+   - Penautan ID backlog interaktif (contoh \`BL-217\`, \`SPR-21\`).
+   - Iframe streaming kantor virtual 3D Three.js dengan kontrol lantai 0–4.
+
+## 3. Backlog Terkait:
+- \`AGT-101\`: Core Architecture & Channels (8 SP - P0)
+- \`AGT-102\`: Agent Profiles & Telemetry (5 SP - P0)
+- \`AGT-103\`: Code Diffs & Task Actions (5 SP - P0)
+- \`AGT-104\`: Anti-Slop UI Polish & Layout Fix (8 SP - P0)
+- \`AGT-105\`: Real-time Interaction & Rich Actions (5 SP - P0)
+
+## Permohonan Keputusan:
+Memohon otorisasi dan persetujuan resmi dari Mas Rizco Renova selaku Team Lead agar seluruh tim dapat menyelesaikan dan mengunci modul chat ini.`,
+    authorId: 5,
+    authorName: 'Fajar Nugraha',
+    authorRole: 'Fullstack Web Lead & Integrations',
+    authorDivision: 'engineering',
+    targetBacklogId: 'AGT-104',
+    targetBacklogTitle: 'Agent Chat Industrial UI Polish & Anti-Slop Redesign',
+    status: 'pending_approval',
+    submittedAt: '18:15',
+  },
 ];
