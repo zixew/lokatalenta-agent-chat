@@ -7,6 +7,7 @@ import { Sidebar } from './components/Sidebar';
 import { HUMAN_LEAD, LOKATALENTA_AGENTS } from './data/agents';
 import { INITIAL_CHANNELS } from './data/channels';
 import { INITIAL_MESSAGES } from './data/initialMessages';
+import { detectMentionedAgent, generatePersonaReply } from './services/personaEngine';
 import type { Agent, Message } from './types/chat';
 
 export function App() {
@@ -84,6 +85,36 @@ export function App() {
     };
 
     setMessages((prev) => [...prev, newMsg]);
+
+    // Check if an agent should reply automatically in persona!
+    let respondingAgent: Agent | null = null;
+    if (activeDmAgentId !== null) {
+      respondingAgent = LOKATALENTA_AGENTS.find((a) => a.id === activeDmAgentId) ?? null;
+    } else {
+      respondingAgent = detectMentionedAgent(content);
+    }
+
+    if (respondingAgent && respondingAgent.id !== currentUser.id) {
+      setTimeout(() => {
+        const replyPayload = generatePersonaReply({
+          sender: currentUser,
+          targetAgent: respondingAgent!,
+          userMessage: content,
+          channelId: targetChannelId,
+        });
+
+        const replyTime = new Date();
+        const replyTimeStr = `${String(replyTime.getHours()).padStart(2, '0')}:${String(replyTime.getMinutes()).padStart(2, '0')}`;
+
+        const replyMsg: Message = {
+          ...replyPayload,
+          id: `reply-${Date.now()}`,
+          timestamp: replyTimeStr,
+        };
+
+        setMessages((prev) => [...prev, replyMsg]);
+      }, 550);
+    }
   };
 
   const handleAddReaction = (messageId: string, emoji: string) => {
