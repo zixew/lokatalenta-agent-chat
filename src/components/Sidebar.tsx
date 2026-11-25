@@ -33,8 +33,8 @@ export function Sidebar({
           <Radio className="w-3 h-3 text-[#0F766E] animate-pulse" />
           Kanal Diskusi
         </span>
-        <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-teal-100 dark:bg-teal-950 text-[#0F766E] dark:text-teal-300 border border-[#0F766E]/30">
-          SPR-21
+        <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-500/40 font-bold">
+          SPR-22 (DONE)
         </span>
       </div>
 
