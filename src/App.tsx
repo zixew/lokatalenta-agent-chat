@@ -317,6 +317,20 @@ export function App() {
       respondingAgent = LOKATALENTA_AGENTS.find((a) => a.id === activeDmAgentId) ?? null;
     } else {
       respondingAgent = detectMentionedAgent(content);
+      // In channel mode, if no specific agent was mentioned, have a relevant lead reply!
+      if (!respondingAgent) {
+        if (activeChannelId === 'qa-visual-testing') {
+          respondingAgent = LOKATALENTA_AGENTS.find((a) => a.id === 10) ?? null; // Qonita
+        } else if (activeChannelId === 'office-3d-telemetry') {
+          respondingAgent = LOKATALENTA_AGENTS.find((a) => a.id === 1) ?? null; // Raka
+        } else if (activeChannelId === 'backlog-refinement') {
+          respondingAgent = LOKATALENTA_AGENTS.find((a) => a.id === 2) ?? null; // Pranadipa
+        } else if (activeChannelId === 'sprint-21-sync') {
+          respondingAgent = LOKATALENTA_AGENTS.find((a) => a.id === 5) ?? null; // Fajar
+        } else {
+          respondingAgent = LOKATALENTA_AGENTS.find((a) => a.id === 7) ?? null; // Bayu (Design)
+        }
+      }
     }
 
     if (respondingAgent && respondingAgent.id !== currentUser.id) {
@@ -338,7 +352,7 @@ export function App() {
         };
 
         setMessages((prev) => [...prev, replyMsg]);
-      }, 550);
+      }, 400);
     }
   };
 
@@ -506,6 +520,70 @@ export function App() {
         onApprove={handleApproveProposal}
         onRequestRevision={handleRequestRevisionProposal}
         onReject={handleRejectProposal}
+        onCreateProposal={(newProp) => {
+          const now = new Date();
+          const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+          const id = `PRP-210${proposals.length + 1}`;
+          const created: DocumentProposal = {
+            ...newProp,
+            id,
+            status: 'pending_approval',
+            submittedAt: timeStr,
+          };
+          setProposals((prev) => [created, ...prev]);
+
+          const notifyMsg: Message = {
+            id: `msg-submit-${Date.now()}`,
+            channelId: 'sprint-21-sync',
+            senderId: newProp.authorId,
+            senderName: newProp.authorName,
+            senderRole: newProp.authorRole,
+            senderDivision: newProp.authorDivision,
+            content: `📄 **[PROPOSAL BARU DIAJUKAN]** Proposal dokumen **${id}: ${newProp.title}** telah diajukan ke Document Approval Hub!\n\nTarget Backlog: \`${newProp.targetBacklogId}\` (${newProp.targetBacklogTitle})\nMohon kesediaan Mas @Rizco Renova untuk meninjau dan memberikan keputusan otorisasi. Seluruh pengerjaan teknis dibekukan sampai proposal disetujui.`,
+            timestamp: timeStr,
+            taskRef: {
+              id: newProp.targetBacklogId,
+              title: newProp.targetBacklogTitle,
+              status: 'pending_approval',
+            },
+            reactions: [{ emoji: '👀', count: 2, agentIds: [0, newProp.authorId] }],
+          };
+          setMessages((prev) => [...prev, notifyMsg]);
+        }}
+        onAuthorizeRelease={(ver, notes) => {
+          const now = new Date();
+          const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+          const relMsg: Message = {
+            id: `msg-release-auth-${Date.now()}`,
+            channelId: 'sprint-21-sync',
+            senderId: 0,
+            senderName: 'Rizco Renova (You)',
+            senderRole: 'Team Lead & Release Arbiter',
+            senderDivision: 'executive',
+            content: `🚀 **[OTORISASI RILIS PRODUKSI RESMI DIBERIKAN]**\n\nSebagai Team Lead & Release Arbiter, saya **MENYETUJUI PENUH** peluncuran rilis **${ver}** ke lingkungan produksi Vercel!\n\n*Catatan Rilis:* "${notes}"\n\nKepada @Aris Munandar (DevOps) dan seluruh tim, silakan eksekusi release pipeline dan update production tags!`,
+            timestamp: timeStr,
+            reactions: [{ emoji: '🎉', count: 6, agentIds: [1, 2, 5, 7, 10, 11] }],
+          };
+          setMessages((prev) => [...prev, relMsg]);
+
+          setTimeout(() => {
+            const devops = LOKATALENTA_AGENTS.find((a) => a.id === 11);
+            if (devops) {
+              const respMsg: Message = {
+                id: `msg-devops-ack-${Date.now()}`,
+                channelId: 'sprint-21-sync',
+                senderId: devops.id,
+                senderName: devops.name,
+                senderRole: devops.role,
+                senderDivision: devops.division,
+                content: `Siap laksanakan Mas Lead @Rizco Renova! Otorisasi rilis ${ver} valid. Deployment produksi dan caching Brotli di Vercel edge segera kami aktifkan! 🚀`,
+                timestamp: timeStr,
+                reactions: [{ emoji: '⚡', count: 3, agentIds: [0, 11] }],
+              };
+              setMessages((prev) => [...prev, respMsg]);
+            }
+          }, 600);
+        }}
       />
     </div>
   );
