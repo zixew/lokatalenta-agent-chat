@@ -11,9 +11,7 @@ interface HeaderProps {
   rosterOpen: boolean;
   onOpenAutoDiscussion: () => void;
   onOpenOffice3D: () => void;
-  onOpenDocumentApproval: () => void;
   onOpenSwarmControl: () => void;
-  pendingProposalsCount: number;
   searchQuery: string;
   onSearchChange: (q: string) => void;
 }
@@ -27,9 +25,7 @@ export function Header({
   rosterOpen,
   onOpenAutoDiscussion,
   onOpenOffice3D,
-  onOpenDocumentApproval,
   onOpenSwarmControl,
-  pendingProposalsCount,
   searchQuery,
   onSearchChange,
 }: HeaderProps) {
@@ -82,25 +78,17 @@ export function Header({
           <span className="hidden sm:inline font-sans font-bold">Swarm Control</span>
         </button>
 
-        {/* Document Approval Gatekeeper Pill */}
-        <button
-          type="button"
-          onClick={onOpenDocumentApproval}
-          title="Buka Hub Otorisasi Dokumen & Proposal Sprint (Wewenang Penuh Team Lead Rizco Renova)"
-          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-semibold transition-all cursor-pointer active:scale-[0.98] ${
-            pendingProposalsCount > 0
-              ? 'border border-amber-400 bg-amber-50 dark:bg-amber-950/60 text-amber-900 dark:text-amber-200 shadow-xs'
-              : 'border border-teal-500 bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-200'
-          }`}
+        {/* Standalone Document & Release Approval Portal Direct Link */}
+        <a
+          href="http://localhost:3006"
+          target="_blank"
+          rel="noreferrer"
+          title="Buka Portal Otorisasi Dokumen & Rilis (Standar Eksekutif Agile SDLC - Port 3006)"
+          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-semibold border border-amber-400/80 bg-amber-50 dark:bg-amber-950/60 text-amber-900 dark:text-amber-200 shadow-xs hover:bg-amber-100 dark:hover:bg-amber-900/40 transition-all cursor-pointer active:scale-[0.98]"
         >
           <ShieldAlert className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
-          <span className="hidden sm:inline font-sans">Otorisasi Dokumen</span>
-          {pendingProposalsCount > 0 && (
-            <span className="px-1.5 py-0.2 rounded text-[10px] font-mono font-bold bg-amber-500 text-white leading-none">
-              {pendingProposalsCount}
-            </span>
-          )}
-        </button>
+          <span className="hidden sm:inline font-sans font-bold">Portal Otorisasi ↗</span>
+        </a>
 
         {/* 3D Virtual Office Button */}
         <button
