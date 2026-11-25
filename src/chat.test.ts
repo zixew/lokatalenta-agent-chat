@@ -3,6 +3,7 @@ import { TEAM_LEAD_USER, LOKATALENTA_AGENTS } from './data/agents';
 import { INITIAL_CHANNELS } from './data/channels';
 import { INITIAL_PROPOSALS } from './data/initialProposals';
 import { detectMentionedAgent, generatePersonaReply } from './services/personaEngine';
+import { formatEventToChatMessage } from './services/eventBusListener';
 
 describe('LokaTalenta Agent Chat Data Models & Persona Engine', () => {
   it('contains all 13 AI agents with correct roles and floor positions', () => {
@@ -200,6 +201,38 @@ describe('LokaTalenta Agent Chat Data Models & Persona Engine', () => {
       });
       expect(dimasReply.senderName).toBe('Dimas Saputra');
       expect(dimasReply.taskRef?.id).toBe('BL-217');
+    });
+  });
+
+  describe('BL-221: Bi-directional Real-Time WebSocket/Event Gateway', () => {
+    it('formats proposal approval event into celebratory team broadcast message', () => {
+      const msg = formatEventToChatMessage({
+        type: 'proposal_approved',
+        proposalId: 'PRP-2101',
+        proposalTitle: 'LMS Hexagonal Theme Contract',
+        targetBacklogId: 'ARC-211',
+        targetBacklogTitle: 'Theme Token Engine',
+        notes: 'Disetujui penuh oleh Team Lead.',
+        timestamp: '19:15',
+      });
+      expect(msg.channelId).toBe('sprint-21-sync');
+      expect(msg.content).toContain('OTORISASI RESMI DITERIMA DARI PORTAL');
+      expect(msg.content).toContain('PRP-2101');
+      expect(msg.taskRef?.status).toBe('approved');
+      expect(msg.reactions[0].emoji).toBe('🎉');
+    });
+
+    it('formats release authorization event into production deployment signal', () => {
+      const relMsg = formatEventToChatMessage({
+        type: 'release_authorized',
+        version: 'v4.0.0',
+        notes: 'Release certified by Team Lead Rizco Renova.',
+        timestamp: '19:15',
+      });
+      expect(relMsg.channelId).toBe('sprint-21-sync');
+      expect(relMsg.content).toContain('OTORISASI RILIS PRODUKSI RESMI DIBERIKAN');
+      expect(relMsg.content).toContain('v4.0.0');
+      expect(relMsg.reactions[0].emoji).toBe('🚀');
     });
   });
 });

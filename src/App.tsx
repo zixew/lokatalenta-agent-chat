@@ -10,6 +10,7 @@ import { TEAM_LEAD_USER, LOKATALENTA_AGENTS } from './data/agents';
 import { INITIAL_CHANNELS } from './data/channels';
 import { INITIAL_MESSAGES } from './data/initialMessages';
 import { detectMentionedAgent, generatePersonaReply } from './services/personaEngine';
+import { setupSDLCEventListener, formatEventToChatMessage } from './services/eventBusListener';
 import type { Agent, Message } from './types/chat';
 
 export function App() {
@@ -52,6 +53,17 @@ export function App() {
   useEffect(() => {
     localStorage.setItem('lokatalenta-agent-messages', JSON.stringify(messages));
   }, [messages]);
+
+  useEffect(() => {
+    const cleanup = setupSDLCEventListener((event) => {
+      const msg = formatEventToChatMessage(event);
+      setMessages((prev) => {
+        if (prev.some((m) => m.id === msg.id)) return prev;
+        return [...prev, msg];
+      });
+    });
+    return cleanup;
+  }, []);
 
   const handleBroadcastToSwarm = (content: string) => {
     const now = new Date();

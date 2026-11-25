@@ -1,4 +1,4 @@
-import { Building2, ExternalLink, RefreshCw, X } from 'lucide-react';
+import { Building2, ExternalLink, RefreshCw, Volume2, VolumeX, X } from 'lucide-react';
 import { useState } from 'react';
 
 interface Office3DModalProps {
@@ -8,18 +8,54 @@ interface Office3DModalProps {
 }
 
 const FLOORS = [
-  { id: 0, label: 'Lantai 0: Lobby & Resepsionis' },
-  { id: 1, label: 'Lantai 1: Engineering & QA Hub' },
-  { id: 2, label: 'Lantai 2: Executive Boardroom' },
-  { id: 3, label: 'Lantai 3: Architecture & Lab' },
-  { id: 4, label: 'Lantai 4: Rooftop Garden Lounge' },
+  { id: 0, label: 'Lantai 0: Lobby & Resepsionis', division: 'Public / Welcome' },
+  { id: 1, label: 'Lantai 1: Engineering & QA Hub', division: 'Tech Core (#5, #6, #7, #8, #9, #10)' },
+  { id: 2, label: 'Lantai 2: Executive Boardroom', division: 'Leadership (#0 Rizco, #2 Pranadipa, #12)' },
+  { id: 3, label: 'Lantai 3: Architecture & Lab', division: 'Graphics & Infra (#1 Raka, #3, #4)' },
+  { id: 4, label: 'Lantai 4: Rooftop Garden Lounge', division: 'DevOps & Breakout (#11 Aris Munandar)' },
 ];
+
+function playElevatorChime() {
+  try {
+    const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    if (!AudioContextClass) return;
+    const ctx = new AudioContextClass();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15); // A5
+    gain.gain.setValueAtTime(0.12, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.6);
+  } catch {
+    // AudioContext blocked by browser policy
+  }
+}
 
 export function Office3DModal({ isOpen, onClose, initialFloor = 2 }: Office3DModalProps) {
   const [selectedFloor, setSelectedFloor] = useState<number>(initialFloor);
   const [iframeKey, setIframeKey] = useState<number>(0);
+  const [audioEnabled, setAudioEnabled] = useState<boolean>(true);
+  const [transitNotice, setTransitNotice] = useState<string | null>(null);
 
   if (!isOpen) return null;
+
+  const handleFloorChange = (floorId: number) => {
+    if (floorId === selectedFloor) return;
+    setSelectedFloor(floorId);
+    if (audioEnabled) {
+      playElevatorChime();
+    }
+    const targetFloor = FLOORS.find((f) => f.id === floorId);
+    setTransitNotice(`🛗 Lift Menuju ${targetFloor?.label} (${targetFloor?.division})`);
+    setTimeout(() => {
+      setTransitNotice(null);
+    }, 2400);
+  };
 
   const officeUrl = 'https://lokatalenta-office-3d.vercel.app';
 
@@ -47,6 +83,14 @@ export function Office3DModal({ isOpen, onClose, initialFloor = 2 }: Office3DMod
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setAudioEnabled(!audioEnabled)}
+              title={audioEnabled ? 'Matikan Audio Spasial Lift' : 'Nyalakan Audio Spasial Lift'}
+              className="p-1.5 rounded border border-[#D4D4CE] dark:border-[#282E3D] text-[#52525B] dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 cursor-pointer"
+            >
+              {audioEnabled ? <Volume2 className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" /> : <VolumeX className="w-3.5 h-3.5 text-slate-400" />}
+            </button>
             <button
               type="button"
               onClick={() => setIframeKey((k) => k + 1)}
@@ -82,10 +126,10 @@ export function Office3DModal({ isOpen, onClose, initialFloor = 2 }: Office3DMod
               <button
                 key={f.id}
                 type="button"
-                onClick={() => setSelectedFloor(f.id)}
+                onClick={() => handleFloorChange(f.id)}
                 className={`px-2.5 py-1 rounded text-xs font-mono transition-colors cursor-pointer border ${
                   selectedFloor === f.id
-                    ? 'bg-[#0F766E] border-[#0F766E] text-white font-bold'
+                    ? 'bg-[#0F766E] border-[#0F766E] text-white font-bold shadow-xs'
                     : 'border-[#D4D4CE] dark:border-[#282E3D] text-[#52525B] dark:text-slate-300 hover:bg-[#F4F4F1]'
                 }`}
               >
@@ -101,6 +145,12 @@ export function Office3DModal({ isOpen, onClose, initialFloor = 2 }: Office3DMod
 
         {/* 3D Viewport iframe */}
         <div className="flex-1 w-full bg-slate-950 relative">
+          {transitNotice && (
+            <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 px-3.5 py-1.5 rounded-full bg-teal-950/90 text-teal-200 border border-teal-500/80 text-xs font-mono font-bold shadow-lg animate-fade-in flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-teal-400 animate-ping" />
+              <span>{transitNotice}</span>
+            </div>
+          )}
           <iframe
             key={iframeKey}
             src={officeUrl}
