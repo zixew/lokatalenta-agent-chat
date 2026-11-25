@@ -6,6 +6,7 @@ import { DocumentApprovalModal } from './components/DocumentApprovalModal';
 import { Header } from './components/Header';
 import { Office3DModal } from './components/Office3DModal';
 import { Sidebar } from './components/Sidebar';
+import { SwarmMissionControlModal } from './components/SwarmMissionControlModal';
 import { TEAM_LEAD_USER, LOKATALENTA_AGENTS } from './data/agents';
 import { INITIAL_CHANNELS } from './data/channels';
 import { INITIAL_MESSAGES } from './data/initialMessages';
@@ -24,6 +25,7 @@ export function App() {
   const [rosterOpen, setRosterOpen] = useState(true);
   const [autoModalOpen, setAutoModalOpen] = useState(false);
   const [approvalModalOpen, setApprovalModalOpen] = useState(false);
+  const [swarmControlOpen, setSwarmControlOpen] = useState(false);
   const [office3dOpen, setOffice3dOpen] = useState(false);
   const [office3dFloor, setOffice3dFloor] = useState(2);
   const [searchQuery, setSearchQuery] = useState('');
@@ -215,6 +217,62 @@ export function App() {
     setMessages((prev) => [...prev, rejectMsg]);
   };
 
+  const handleBroadcastToSwarm = (content: string) => {
+    const now = new Date();
+    const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+    const broadcastMsg: Message = {
+      id: `msg-swarm-${Date.now()}`,
+      channelId: 'sprint-21-sync',
+      senderId: 0,
+      senderName: 'Rizco Renova (You)',
+      senderRole: 'Team Lead & Release Arbiter',
+      senderDivision: 'executive',
+      content: `⚡ **[SWARM MISSION BROADCAST]** ${content}`,
+      timestamp: timeStr,
+      reactions: [{ emoji: '⚡', count: 4, agentIds: [1, 5, 7, 10] }],
+    };
+
+    setMessages((prev) => [...prev, broadcastMsg]);
+
+    // Multiple agents respond in turn to the broadcast
+    setTimeout(() => {
+      const respTime1 = new Date();
+      const t1 = `${String(respTime1.getHours()).padStart(2, '0')}:${String(respTime1.getMinutes()).padStart(2, '0')}`;
+      const fajar = LOKATALENTA_AGENTS.find((a) => a.id === 5)!;
+      const fajarMsg: Message = {
+        id: `msg-reply-fajar-${Date.now()}`,
+        channelId: 'sprint-21-sync',
+        senderId: fajar.id,
+        senderName: fajar.name,
+        senderRole: fajar.role,
+        senderDivision: fajar.division,
+        content: `Instruksi swarm diterima Mas Lead @Rizco Renova! Tim Web Engineering langsung menyelaraskan task komponen.`,
+        timestamp: t1,
+        reactions: [{ emoji: '🚀', count: 2, agentIds: [0, 5] }],
+      };
+      setMessages((prev) => [...prev, fajarMsg]);
+    }, 500);
+
+    setTimeout(() => {
+      const respTime2 = new Date();
+      const t2 = `${String(respTime2.getHours()).padStart(2, '0')}:${String(respTime2.getMinutes()).padStart(2, '0')}`;
+      const qonita = LOKATALENTA_AGENTS.find((a) => a.id === 10)!;
+      const qonitaMsg: Message = {
+        id: `msg-reply-qonita-${Date.now()}`,
+        channelId: 'sprint-21-sync',
+        senderId: qonita.id,
+        senderName: qonita.name,
+        senderRole: qonita.role,
+        senderDivision: qonita.division,
+        content: `QA Test Suite siaga penuh. Seluruh test cases komprehensif kami eksekusi otomatis untuk setiap perubahan!`,
+        timestamp: t2,
+        reactions: [{ emoji: '✅', count: 3, agentIds: [0, 5, 10] }],
+      };
+      setMessages((prev) => [...prev, qonitaMsg]);
+    }, 1100);
+  };
+
   const handleSelectChannel = (id: string) => {
     setActiveChannelId(id);
     setActiveDmAgentId(null);
@@ -379,6 +437,7 @@ export function App() {
           setOffice3dOpen(true);
         }}
         onOpenDocumentApproval={() => setApprovalModalOpen(true)}
+        onOpenSwarmControl={() => setSwarmControlOpen(true)}
         pendingProposalsCount={proposals.filter((p) => p.status === 'pending_approval').length}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
@@ -426,6 +485,18 @@ export function App() {
         isOpen={office3dOpen}
         onClose={() => setOffice3dOpen(false)}
         initialFloor={office3dFloor}
+      />
+
+      <SwarmMissionControlModal
+        isOpen={swarmControlOpen}
+        onClose={() => setSwarmControlOpen(false)}
+        agents={LOKATALENTA_AGENTS}
+        onBroadcastToSwarm={handleBroadcastToSwarm}
+        onOpenOffice3D={(floor) => {
+          setOffice3dFloor(floor);
+          setSwarmControlOpen(false);
+          setOffice3dOpen(true);
+        }}
       />
 
       <DocumentApprovalModal

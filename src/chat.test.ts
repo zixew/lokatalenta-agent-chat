@@ -67,8 +67,44 @@ describe('LokaTalenta Agent Chat Data Models & Persona Engine', () => {
 
     expect(reply.senderName).toBe('Qonita Anindya');
     expect(reply.senderRole).toBe('QA Lead & Visual Testing Arbiter');
-    expect(reply.content).toContain('168 unit tests');
+    expect(reply.content).toContain('176 unit tests');
     expect(reply.taskRef?.id).toBe('QAE-211');
+  });
+
+  describe('AGT-106 & AGT-107: Autonomous Collaboration & Swarm Mission Control', () => {
+    it('generates responsive context-aware answers for direct message inquiries across all divisions', () => {
+      const dimas = LOKATALENTA_AGENTS.find((a) => a.id === 6)!;
+      const dimasReply = generatePersonaReply({
+        sender: TEAM_LEAD_USER,
+        targetAgent: dimas,
+        userMessage: 'Dimas, bagaimana kesiapan video player BL-217?',
+        channelId: 'dm_0_6',
+      });
+
+      expect(dimasReply.senderName).toBe('Dimas Saputra');
+      expect(dimasReply.content).toContain('LessonTheatrePlayer');
+      expect(dimasReply.taskRef?.id).toBe('BL-217');
+
+      const bagas = LOKATALENTA_AGENTS.find((a) => a.id === 3)!;
+      const bagasReply = generatePersonaReply({
+        sender: TEAM_LEAD_USER,
+        targetAgent: bagas,
+        userMessage: 'Bagas, bagaimana status SSE gateway sync?',
+        channelId: 'dm_0_3',
+      });
+      expect(bagasReply.senderName).toBe('Bagas Prakoso');
+      expect(bagasReply.content).toContain('Event Gateway SSE');
+    });
+
+    it('verifies all 13 agents have active roles, floors, and current tasks defined', () => {
+      for (const agent of LOKATALENTA_AGENTS) {
+        expect(agent.name).toBeDefined();
+        expect(agent.role).toBeDefined();
+        expect(agent.floor).toBeGreaterThanOrEqual(0);
+        expect(agent.floor).toBeLessThanOrEqual(4);
+        expect(agent.currentTask.length).toBeGreaterThan(5);
+      }
+    });
   });
 
   describe('AGT-101: Discussion Hub Core Architecture & Channel System', () => {

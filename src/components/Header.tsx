@@ -1,4 +1,4 @@
-import { Building2, ChevronDown, Moon, Search, Sun, Users, Zap, ShieldAlert } from 'lucide-react';
+import { Building2, ChevronDown, Moon, Search, Sun, Users, Zap, ShieldAlert, Cpu } from 'lucide-react';
 import type { Agent } from '../types/chat';
 import { LOKATALENTA_AGENTS } from '../data/agents';
 
@@ -12,6 +12,7 @@ interface HeaderProps {
   onOpenAutoDiscussion: () => void;
   onOpenOffice3D: () => void;
   onOpenDocumentApproval: () => void;
+  onOpenSwarmControl: () => void;
   pendingProposalsCount: number;
   searchQuery: string;
   onSearchChange: (q: string) => void;
@@ -27,6 +28,7 @@ export function Header({
   onOpenAutoDiscussion,
   onOpenOffice3D,
   onOpenDocumentApproval,
+  onOpenSwarmControl,
   pendingProposalsCount,
   searchQuery,
   onSearchChange,
@@ -69,6 +71,17 @@ export function Header({
 
       {/* Actions */}
       <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        {/* Swarm Mission Control Embedded Button */}
+        <button
+          type="button"
+          onClick={onOpenSwarmControl}
+          title="Buka Swarm Mission Control (Pusat Kendali Kolaborasi 13 Agen AI)"
+          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-semibold border border-teal-600 bg-teal-50 dark:bg-teal-950/70 text-[#0F766E] dark:text-teal-300 hover:bg-[#0F766E] hover:text-white transition-all cursor-pointer active:scale-[0.98]"
+        >
+          <Cpu className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400 shrink-0" />
+          <span className="hidden sm:inline font-sans font-bold">Swarm Control</span>
+        </button>
+
         {/* Document Approval Gatekeeper Pill */}
         <button
           type="button"
