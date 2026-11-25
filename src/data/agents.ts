@@ -1,28 +1,17 @@
 import type { Agent } from '../types/chat';
 
-export const HUMAN_LEAD: Agent = {
-  id: -1,
-  name: 'Lead Human Engineer',
-  role: 'Technical Director & Supervisor',
-  division: 'executive',
-  avatar: 'HL',
-  status: 'online',
-  currentTask: 'Supervising Sprint 21 & LMS v4.0.0 Anti-Slop Overhaul',
-  floor: 2,
-  bio: 'Human engineering director coordinating the 13 autonomous agents.',
-};
-
 export const LOKATALENTA_AGENTS: Agent[] = [
   {
     id: 0,
-    name: 'Rizco Renova',
-    role: 'Sprint Lead & Release Arbiter',
+    name: 'Rizco Renova (You)',
+    role: 'Team Lead & Release Arbiter',
     division: 'executive',
     avatar: 'RR',
     status: 'online',
-    currentTask: 'Overseeing Sprint 21 capacity and major v4.0.0 release',
+    currentTask: 'Directing Sprint 21, Document Approvals & Full LMS UI Revamp',
     floor: 2,
-    bio: 'Leads release governance, sprint retrospectives, and cross-division capacity alignment.',
+    bio: 'Team Lead with exclusive executive authority over document proposals, sprint releases, and architectural sign-offs.',
+    isUser: true,
   },
   {
     id: 1,
@@ -86,7 +75,7 @@ export const LOKATALENTA_AGENTS: Agent[] = [
     division: 'engineering',
     avatar: 'DS',
     status: 'coding',
-    currentTask: 'Implementing CoursePlayerPage & lesson theater improvements',
+    currentTask: 'Awaiting Lead approval for CoursePlayerPage Lesson Theatre (PRP-2102)',
     floor: 1,
     bio: 'Core builder of the QuizRunner proctoring engine, Kraepelin test, and practice mode.',
   },
@@ -97,7 +86,7 @@ export const LOKATALENTA_AGENTS: Agent[] = [
     division: 'engineering',
     avatar: 'BP',
     status: 'reviewing',
-    currentTask: 'Validating DESIGN.md token fidelity across components',
+    currentTask: 'Awaiting Lead approval for DESIGN.md Token Contract (PRP-2103)',
     floor: 1,
     bio: 'Design system custodian ensuring Plus Jakarta Sans and JetBrains Mono token discipline.',
   },
@@ -108,7 +97,7 @@ export const LOKATALENTA_AGENTS: Agent[] = [
     division: 'engineering',
     avatar: 'HG',
     status: 'testing',
-    currentTask: 'Auditing CSP security headers and anti-cheat token validation',
+    currentTask: 'Awaiting Lead approval for CSP Security & Proctoring Protocol (PRP-2105)',
     floor: 1,
     bio: 'Security architect ensuring zero vulnerabilities, strict rate limiting, and session security.',
   },
@@ -130,7 +119,7 @@ export const LOKATALENTA_AGENTS: Agent[] = [
     division: 'qa',
     avatar: 'QA',
     status: 'testing',
-    currentTask: 'Running multi-viewport visual audits (375px/768px/1280px)',
+    currentTask: 'Awaiting Lead approval for Multi-Viewport QA Sign-off Protocol (PRP-2104)',
     floor: 1,
     bio: 'Relentless QA lead verifying WCAG 2.1 AA contrast, touch boundaries, and test automation.',
   },
@@ -152,8 +141,10 @@ export const LOKATALENTA_AGENTS: Agent[] = [
     division: 'executive',
     avatar: 'TW',
     status: 'reviewing',
-    currentTask: 'Documenting Sprint 21 commitments and anti-slop design protocols',
+    currentTask: 'Awaiting Lead approval for Sprint 21 Execution Charter RFC (PRP-2101)',
     floor: 2,
     bio: 'Custodian of documentation, project changelogs, architecture records, and team confluence.',
   },
 ];
+
+export const TEAM_LEAD_USER = LOKATALENTA_AGENTS[0];

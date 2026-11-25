@@ -1,6 +1,6 @@
-import { Building2, ChevronDown, Moon, Search, Sun, Users, Zap } from 'lucide-react';
+import { Building2, ChevronDown, Moon, Search, Sun, Users, Zap, ShieldAlert } from 'lucide-react';
 import type { Agent } from '../types/chat';
-import { HUMAN_LEAD, LOKATALENTA_AGENTS } from '../data/agents';
+import { LOKATALENTA_AGENTS } from '../data/agents';
 
 interface HeaderProps {
   currentUser: Agent;
@@ -11,6 +11,8 @@ interface HeaderProps {
   rosterOpen: boolean;
   onOpenAutoDiscussion: () => void;
   onOpenOffice3D: () => void;
+  onOpenDocumentApproval: () => void;
+  pendingProposalsCount: number;
   searchQuery: string;
   onSearchChange: (q: string) => void;
 }
@@ -24,10 +26,12 @@ export function Header({
   rosterOpen,
   onOpenAutoDiscussion,
   onOpenOffice3D,
+  onOpenDocumentApproval,
+  pendingProposalsCount,
   searchQuery,
   onSearchChange,
 }: HeaderProps) {
-  const allUsers = [HUMAN_LEAD, ...LOKATALENTA_AGENTS];
+  const allUsers = LOKATALENTA_AGENTS;
 
   return (
     <header className="h-14 border-b border-[#D4D4CE] dark:border-[#282E3D] bg-white dark:bg-[#161B22] px-4 flex items-center justify-between gap-3 shrink-0 select-none">
@@ -69,6 +73,25 @@ export function Header({
 
         <button
           type="button"
+          onClick={onOpenDocumentApproval}
+          title="Buka Hub Otorisasi Dokumen & Proposal Sprint (Wewenang Penuh Team Lead Rizco Renova)"
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded border text-xs font-semibold transition-all cursor-pointer active:scale-[0.98] ${
+            pendingProposalsCount > 0
+              ? 'border-amber-400 bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-200 animate-pulse'
+              : 'border-teal-500 bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-200'
+          }`}
+        >
+          <ShieldAlert className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+          <span className="hidden sm:inline">Otorisasi Dokumen</span>
+          {pendingProposalsCount > 0 && (
+            <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-500 text-white">
+              {pendingProposalsCount}
+            </span>
+          )}
+        </button>
+
+        <button
+          type="button"
           onClick={onOpenOffice3D}
           title="Buka Kantor Virtual 3D LokaTalenta"
           className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-[#D4D4CE] dark:border-[#282E3D] bg-[#F4F4F1] dark:bg-[#11141B] text-xs font-semibold text-[#18181B] dark:text-white hover:border-[#0F766E] transition-colors cursor-pointer active:scale-[0.98]"
@@ -100,7 +123,7 @@ export function Header({
           >
             {allUsers.map((u) => (
               <option key={u.id} value={u.id}>
-                {u.id === -1 ? '👤' : '🤖'} {u.name} ({u.role})
+                {u.id === 0 ? '👑' : '🤖'} {u.name} ({u.role})
               </option>
             ))}
           </select>
